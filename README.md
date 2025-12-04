@@ -10,4 +10,4 @@ Folder asset có hình avt và hình ảnh sản phẩm
 
 ## Kết quả
 
-![Kết quả giao diện](BaiTap1/Source%20Code/baitap1/assets/images/sanpham.png)
+![Kết quả giao diện](BaiTap1/SourceCode/baitap1/assets/images/sanpham.png)
