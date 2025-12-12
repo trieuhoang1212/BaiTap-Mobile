@@ -16,3 +16,8 @@
         - [Avt & Sản phẩm](BaiTap1/SourceCode/baitap1/assets/images)
 
 
+[**Bài tập 2**](BaiTap2)
+Tạo UI giống mẫu.
+        - [main.dart](BaiTap2/SourceCode/lib/main.dart)
+        - [Source Code](BaiTap2/SourceCode)
+        - [Mẫu & Sản phẩm](BaiTap2/SourceCode/assets/images)
