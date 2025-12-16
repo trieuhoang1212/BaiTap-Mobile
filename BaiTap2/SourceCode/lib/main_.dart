@@ -16,42 +16,40 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const EmailList(),
+      home: const NumberList(),
     );
   }
 }
 
-class EmailList extends StatefulWidget {
-  const EmailList({super.key});
+class NumberList extends StatefulWidget {
+  const NumberList({super.key});
 
   @override
-  State<EmailList> createState() => _EmailState();
+  State<NumberList> createState() => _NumberListState();
 }
 
-class _EmailState extends State<EmailList> {
-  final TextEditingController _emailController1 = TextEditingController();
-  String result = '';
-  String erorMess = '';
+class _NumberListState extends State<NumberList> {
+  final TextEditingController controller = TextEditingController();
+  List<int> numberList = [];
 
-  void checkLegit() {
+  void createList() {
     FocusScope.of(context).unfocus();
-    final input = _emailController1.text.trim();
+    final input = controller.text.trim();
+    final number = int.tryParse(input);
 
-    final emailRegex = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-    );
-
-    if (!emailRegex.hasMatch(input)) {
-      setState(() {
-        erorMess = 'Vui lòng nhập địa chỉ email hợp lệ!';
-        result = '';
-      });
+    if (number == null || number <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Vui lòng nhập số nguyên dương hợp lệ!'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
       return;
     }
 
     setState(() {
-      result = 'Địa chỉ email hợp lệ: $input';
-      erorMess = '';
+      numberList = List.generate(number, (index) => index + 1);
     });
   }
 
@@ -79,11 +77,11 @@ class _EmailState extends State<EmailList> {
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: _emailController1,
-                      keyboardType: TextInputType.emailAddress,
+                      controller: controller,
+                      keyboardType: TextInputType.number,
                       textAlign: TextAlign.left, // Căn giữa chữ khi nhập
                       decoration: const InputDecoration(
-                        hintText: 'Email',
+                        hintText: 'Nhập vào số lượng',
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 20,
                           horizontal: 15,
@@ -98,7 +96,7 @@ class _EmailState extends State<EmailList> {
                   ),
                   const SizedBox(width: 10),
                   ElevatedButton(
-                    onPressed: checkLegit,
+                    onPressed: createList,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
@@ -120,21 +118,44 @@ class _EmailState extends State<EmailList> {
 
               const SizedBox(height: 20),
 
-              if (erorMess.isNotEmpty)
-                Text(
-                  erorMess,
-                  style: const TextStyle(color: Colors.red, fontSize: 14),
+              // 3. Thay Expanded bằng Flexible để danh sách không chiếm hết màn hình
+              // Nếu danh sách ngắn, nó nằm giữa. Nếu dài, nó tự cuộn.
+              Flexible(
+                child: ListView.builder(
+                  // 4. Quan trọng: shrinkWrap giúp list co lại vừa đúng số phần tử
+                  shrinkWrap: true,
+                  itemCount: numberList.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Center(
+                        // Căn giữa nút bấm
+                        child: SizedBox(
+                          width: double
+                              .infinity, // Nút bấm kéo dài bằng ô nhập liệu
+                          child: ElevatedButton(
+                            onPressed: () {
+                              print('Đã chọn số ${numberList[index]}');
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFE74C3C),
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                            ),
+                            child: Text(
+                              '${numberList[index]}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-
-              if (result.isNotEmpty)
-                Text(
-                  result,
-                  style: const TextStyle(
-                    color: Colors.green,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              ),
             ],
           ),
         ),
