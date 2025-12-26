@@ -135,7 +135,7 @@ class _NumberListState extends State<NumberList> {
                               .infinity, // Nút bấm kéo dài bằng ô nhập liệu
                           child: ElevatedButton(
                             onPressed: () {
-                              print('Đã chọn số ${numberList[index]}');
+                              ('Đã chọn số ${numberList[index]}');
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFFE74C3C),
