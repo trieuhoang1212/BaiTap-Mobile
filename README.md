@@ -30,3 +30,11 @@
         - [main.dart](BaiTap3/SourceCode/lib/main.dart) 
         - [Source Code](BaiTap3/SourceCode) 
         - [Mẫu & Sản phẩm](BaiTap3/SourceCode/assets/images)
+
+[**Bài tập tuần 4**](Tuan4)
+
+- Tạo UI giống mẫu. Tạo ra một giao diện cơ bản hiển thị một số **Component Basic** của **Flutter** ở và ấn vào các page thì sẽ hiển thị ra gợi ý các sử dụng `Class` ấy.
+        - [main.dart](Tuan4/sourcecode/lib/main.dart)
+        - [Components](Tuan4/sourcecode/lib/Components)
+        - [Source Code](Tuan4/sourcecode) 
+        - [Mẫu & Sản phẩm](Tuan4/sourcecode/assets/images)

@@ -144,6 +144,7 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
         child: RadioListTile<String>(
           value: value,
+          // ignore: deprecated_member_use
           groupValue: selectedPaymentMethod,
           activeColor: const Color(0xFF4A90E2),
           contentPadding: const EdgeInsets.symmetric(
@@ -153,6 +154,7 @@ class _PaymentPageState extends State<PaymentPage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
+          // ignore: deprecated_member_use
           onChanged: (String? newValue) {
             setState(() {
               selectedPaymentMethod = newValue;
