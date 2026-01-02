@@ -34,7 +34,7 @@
 [**Bài tập tuần 4**](Tuan4)
 
 - Tạo UI giống mẫu. Tạo ra một giao diện cơ bản hiển thị một số **Component Basic** của **Flutter** ở và ấn vào các page thì sẽ hiển thị ra gợi ý các sử dụng `Class` ấy.
-        - [main.dart](Tuan4/sourcecode/lib/main.dart)
-        - [Components](Tuan4/sourcecode/lib/Components)
-        - [Source Code](Tuan4/sourcecode) 
-        - [Mẫu & Sản phẩm](Tuan4/sourcecode/assets/images)
+        - [main.dart](Tuan4/sourcecode_tuan1/lib/main.dart)
+        - [Components](Tuan4/sourcecode_tuan1/lib/Components)
+        - [Source Code](Tuan4/sourcecode_tuan1) 
+        - [Mẫu & Sản phẩm](Tuan4/sourcecode_tuan1/assets/images)
