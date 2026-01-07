@@ -1,31 +1,15 @@
 import 'package:flutter/material.dart';
 import 'code_email_page.dart';
 
-void main() {
-  runApp(const MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class EmailConnectPage extends StatefulWidget {
+  const EmailConnectPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MyHomePage(),
-    );
-  }
+  State<EmailConnectPage> createState() => _EmailConnectPageState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _EmailConnectPageState extends State<EmailConnectPage> {
   final TextEditingController _emailController = TextEditingController();
 
   @override

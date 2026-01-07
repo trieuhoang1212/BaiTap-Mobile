@@ -6,14 +6,14 @@ Xây dựng về Data Flow Navigation cho giao diện quên mật khẩu và là
 
 **Giao diện:**
 Giao diện nhập email để gửi mã
-![NhapDung](sourcecode_bai3/assets/images/san_pham.png)
+![NhapDung](sourcecode/assets/images/san_pham.png)
 
 Giao diện nhập mã với 4 số
-![NhapDung](sourcecode_bai3/assets/images/san_pham1.png)
+![NhapDung](sourcecode/assets/images/san_pham1.png)
 
 
 Giao diện nhập và xác thực mật khẩu mới tạo
-![NhapDung](sourcecode_bai3/assets/images/san_pham2.png)
+![NhapDung](sourcecode/assets/images/san_pham2.png)
 
 Giao diện hoàn tất tất cả các bước khi đổi được mật khẩu bị quên
-![NhapDung](sourcecode_bai3/assets/images/san_pham3.png)
+![NhapDung](sourcecode/assets/images/san_pham3.png)
