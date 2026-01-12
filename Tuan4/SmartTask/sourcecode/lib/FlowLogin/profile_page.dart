@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -14,6 +15,10 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
 
+  // firebase remote config instance
+  final _remoteConfig = FirebaseRemoteConfig.instance;
+  String _buttonColorHex = "0xFF4CAF50";
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final User? _currentUser = FirebaseAuth.instance.currentUser;
   bool _isLoading = false;
@@ -22,6 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _loadUserData();
+    _setupRemoteConfig();
   }
 
   @override
@@ -30,6 +36,33 @@ class _ProfilePageState extends State<ProfilePage> {
     _emailController.dispose();
     _dobController.dispose();
     super.dispose();
+  }
+
+  Future<void> _setupRemoteConfig() async {
+    try {
+      // Cấu hình thời gian fetch
+      await _remoteConfig.setConfigSettings(
+        RemoteConfigSettings(
+          fetchTimeout: const Duration(minutes: 1),
+          minimumFetchInterval: Duration.zero,
+        ),
+      );
+
+      // Đặt giá trị mặc định trong code
+      await _remoteConfig.setDefaults(<String, dynamic>{
+        "button_color": "0xFF4CAF50",
+      });
+
+      // Tải dữ liệu từ Firebase về và kích hoạt nó
+      await _remoteConfig.fetchAndActivate();
+
+      // Lấy giá trị từ Firebase và cập nhật giao diện
+      setState(() {
+        _buttonColorHex = _remoteConfig.getString("button_color");
+      });
+    } catch (e) {
+      ("Lỗi Remote Config: $e");
+    }
   }
 
   // Load dữ liệu user từ Firestore
@@ -41,18 +74,18 @@ class _ProfilePageState extends State<ProfilePage> {
     try {
       final doc = await _firestore
           .collection('users')
-          .doc(_currentUser!.uid)
+          .doc(_currentUser.uid)
           .get();
 
       if (doc.exists) {
         final data = doc.data()!;
         _nameController.text = data['name'] ?? '';
-        _emailController.text = data['email'] ?? _currentUser!.email ?? '';
+        _emailController.text = data['email'] ?? _currentUser.email ?? '';
         _dobController.text = data['dateOfBirth'] ?? '';
       } else {
         // Nếu chưa có data, tạo document mới với thông tin cơ bản
-        _emailController.text = _currentUser!.email ?? '';
-        _nameController.text = _currentUser!.displayName ?? '';
+        _emailController.text = _currentUser.email ?? '';
+        _nameController.text = _currentUser.displayName ?? '';
       }
     } catch (e) {
       if (mounted) {
@@ -72,7 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() => _isLoading = true);
 
     try {
-      await _firestore.collection('users').doc(_currentUser!.uid).set({
+      await _firestore.collection('users').doc(_currentUser.uid).set({
         'name': _nameController.text.trim(),
         'email': _emailController.text.trim(),
         'dateOfBirth': _dobController.text.trim(),
@@ -127,7 +160,6 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 1. PHẦN HEADER (Nút Back tròn và Tiêu đề Profile)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -254,18 +286,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
               const SizedBox(height: 30),
 
-              // NÚT SAVE (Lưu thông tin vào Firestore)
               SizedBox(
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _saveUserData,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    backgroundColor: Color(int.parse(_buttonColorHex)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    elevation: 0,
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white)

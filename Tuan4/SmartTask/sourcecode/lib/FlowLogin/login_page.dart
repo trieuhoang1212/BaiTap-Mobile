@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sourcecode_bai3/firebase_options.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sourcecode_bai3/main.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await FirebaseAppCheck.instance.activate(
+    androidProvider: AndroidProvider.debug,
+    appleProvider: AppleProvider.deviceCheck,
+  );
+
   runApp(const MyApp());
 }
 
@@ -92,10 +98,10 @@ class _LoginStateState extends State<LoginState> {
         idToken: googleAuth.idToken,
       );
       await FirebaseAuth.instance.signInWithCredential(credential);
-      print("Đăng nhập thành công! StreamBuilder sẽ tự chuyển trang.");
+      ("Đăng nhập thành công! StreamBuilder sẽ tự chuyển trang.");
     } catch (e) {
       // 4. Nếu lỗi, hiện thông báo lên màn hình điện thoại
-      print('Lỗi chi tiết: $e'); // Xem log chi tiết ở đây
+      ('Lỗi chi tiết: $e'); // Xem log chi tiết ở đây
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -121,9 +127,9 @@ class _LoginStateState extends State<LoginState> {
   Future<void> _handleEmailSignIn() async {
     try {
       await FirebaseAuth.instance.signInAnonymously();
-      print("Đăng nhập ẩn danh thành công");
+      ("Đăng nhập ẩn danh thành công");
     } catch (e) {
-      print("Lỗi: $e");
+      ("Lỗi: $e");
     }
   }
 
