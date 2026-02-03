@@ -45,6 +45,16 @@ dependencies:
   firebase_app_check: ^0.3.2+10
   firebase_analytics: ^11.6.0
 
+  # MVVM & State Management
+  provider: ^6.1.2
+
+  # HTTP Client for API calls
+  http: ^1.2.0
+
+  # Local Database (Room equivalent for Flutter)
+  sqflite: ^2.3.2
+  path: ^1.9.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
