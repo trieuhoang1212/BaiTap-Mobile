@@ -34,7 +34,7 @@ class _NumberListState extends State<NumberList> {
 
   void createList() {
     FocusScope.of(context).unfocus();
-    final input = controller.text.trim();
+    final input = controller.text.trim(); 
     final number = int.tryParse(input);
 
     if (number == null || number <= 0) {
@@ -65,7 +65,7 @@ class _NumberListState extends State<NumberList> {
               const Text(
                 'THỰC HÀNH SỐ 2',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 24, 
                   fontWeight: FontWeight.bold,
                   color: Colors.blue,
                 ),
