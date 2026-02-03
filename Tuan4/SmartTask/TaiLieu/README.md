@@ -1,63 +1,145 @@
-# **Mô Tả**
+# **SmartTask - Ứng Dụng Quản Lý Công Việc**
 
-**Bài tập 3 - Tuần 4** này nói về **data flow navigation** là lưu giữ liệu và chuyền qua các screen khác mà không bị mất, và tạo ra 1 UI đơn giản về việc quên mật khẩu và gửi mã để nhập sau đó thì nhập mật khẩu mới thì sẽ lưu nhớ mật khẩu người dùng mới tạo chứ không phải cái cũ nữa.
+## **Mô Tả**
 
-![NhapDung](../sourcecode_bai3/assets/images/bai_tap.jpg)
+**SmartTask** là ứng dụng quản lý công việc được xây dựng bằng Flutter, áp dụng kiến trúc **MVVM (Model-View-ViewModel)** kết hợp với **Provider** để quản lý state. Ứng dụng tích hợp **Firebase Authentication** để xác thực người dùng và gọi **REST API** để lấy dữ liệu công việc.
 
-# **Các Hàm Chính**
+## **Mục Tiêu**
 
-## 1. **Màn hình nhập Email** ([main.dart](../sourcecode_bai3/lib/main.dart))
+- Hiểu và áp dụng kiến trúc **MVVM** trong Flutter
+- Sử dụng **Provider** để quản lý state
+- Tích hợp **Firebase Auth** (đăng nhập Google, Email/Password)
+- Gọi **REST API** để CRUD dữ liệu
+- Xây dựng giao diện người dùng thân thiện
 
-- **Chức năng**: Người dùng nhập email để yêu cầu đặt lại mật khẩu
-- **Widget chính**: `MyHomePage`
-- **Data flow**: Truyền `email` sang màn hình tiếp theo khi bấm "Next"
-- **Validation**: Kiểm tra email không được để trống
+## **Cấu Trúc Thư Mục**
 
-## 2. **Màn hình nhập mã xác thực** ([code_email_page.dart](../sourcecode_bai3/lib/code_email_page.dart))
+```
+lib/
+├── main.dart                 # Entry point
+├── models/                   # Data models
+│   └── task_model.dart
+├── viewmodels/               # Business logic
+│   ├── task_list_viewmodel.dart
+│   ├── task_detail_viewmodel.dart
+│   └── add_task_viewmodel.dart
+├── views/tasks/              # UI screens
+│   ├── task_list_screen.dart
+│   ├── task_detail_screen.dart
+│   └── add_task_screen.dart
+├── services/                 # API services
+│   └── api_service.dart
+├── repositories/             # Data repositories
+│   └── task_repository.dart
+└── FlowLogin/                # Authentication
+    ├── login_page.dart
+    └── profile_page.dart
+```
 
-- **Chức năng**: Nhập mã xác thực 4 số đã gửi về email
-- **Widget chính**: `CodeEmailPage`
-- **Data flow**:
-  - Nhận `email` từ màn hình trước
-  - Truyền `email` và `verificationCode` sang màn hình tiếp theo
-- **Tính năng đặc biệt**:
-  - 4 ô input riêng biệt (\_c1, \_c2, \_c3, \_c4)
-  - Tự động chuyển focus khi nhập/xóa số
-  - Ghép mã thành chuỗi hoàn chỉnh bằng getter `verificationCode`
+---
 
-## 3. **Màn hình tạo mật khẩu mới** ([new_password_page.dart](../sourcecode_bai3/lib/new_password_page.dart))
+## **Các Hàm Chính**
 
-- **Chức năng**: Nhập mật khẩu mới và xác nhận lại mật khẩu
-- **Widget chính**: `NewPasswordPage`
-- **Data flow**:
-  - Nhận `email` và `verificationCode` từ màn hình trước
-  - Truyền `email`, `verificationCode`, `password` sang màn hình cuối
-- **Tính năng**:
-  - Ẩn/hiện mật khẩu bằng biến `_obscurePass` và `_obscureConfirm`
-  - Kiểm tra 2 mật khẩu phải khớp nhau
+### 1. **TaskListViewModel** ([task_list_viewmodel.dart](lib/viewmodels/task_list_viewmodel.dart))
 
-## 4. **Màn hình xác nhận** ([confirm_page.dart](../sourcecode_bai3/lib/confirm_page.dart))
+| Hàm                        | Mô tả                               |
+| -------------------------- | ----------------------------------- |
+| `fetchTasks()`             | Lấy danh sách công việc từ API      |
+| `deleteTask(id)`           | Xóa công việc theo ID               |
+| `toggleTaskComplete(task)` | Đánh dấu hoàn thành/chưa hoàn thành |
+| `refresh()`                | Làm mới danh sách                   |
 
-- **Chức năng**: Hiển thị tổng hợp thông tin và hoàn tất việc đặt lại mật khẩu
-- **Widget chính**: `ConfirmPage`
-- **Data flow**:
-  - Nhận `email`, `verificationCode`, `password` từ màn hình trước
-  - Hiển thị email và mã xác thực (mật khẩu được ẩn dạng ••••)
-- **Tính năng**:
-  - Nút "Submit" để hoàn tất
-  - Quay về màn hình đầu tiên bằng `popUntil((route) => route.isFirst)`
+### 2. **ApiService** ([api_service.dart](lib/services/api_service.dart))
 
-# **Kết Quả**
+| Hàm                | Mô tả                   |
+| ------------------ | ----------------------- |
+| `getAllTasks()`    | GET - Lấy tất cả tasks  |
+| `getTaskById(id)`  | GET - Lấy chi tiết task |
+| `createTask(task)` | POST - Tạo task mới     |
+| `deleteTask(id)`   | DELETE - Xóa task       |
 
-**Giao diện:**
-Giao diện nhập email để gửi mã
-![NhapDung](../sourcecode_bai3/assets/images/san_pham.png)
+### 3. **Task Model** ([task_model.dart](lib/models/task_model.dart))
 
-Giao diện nhập mã với 4 số
-![NhapDung](../sourcecode_bai3/assets/images/san_pham1.png)
+| Thuộc tính    | Kiểu   | Mô tả                                      |
+| ------------- | ------ | ------------------------------------------ |
+| `id`          | int    | ID công việc                               |
+| `title`       | String | Tiêu đề                                    |
+| `description` | String | Mô tả                                      |
+| `status`      | String | Trạng thái (Pending/In Progress/Completed) |
+| `priority`    | String | Độ ưu tiên (Low/Medium/High)               |
+| `category`    | String | Danh mục                                   |
+| `dueDate`     | String | Hạn hoàn thành                             |
+| `subtasks`    | List   | Công việc con                              |
+| `attachments` | List   | Tệp đính kèm                               |
 
-Giao diện nhập và xác thực mật khẩu mới tạo
-![NhapDung](../sourcecode_bai3/assets/images/san_pham2.png)
+---
 
-Giao diện hoàn tất tất cả các bước khi đổi được mật khẩu bị quên
-![NhapDung](../sourcecode_bai3/assets/images/san_pham3.png)
+## **Màn Hình Ứng Dụng**
+
+### 1. **Màn hình Đăng nhập**
+
+- Đăng nhập bằng Google
+- Đăng nhập bằng Email/Password
+- Tích hợp Firebase Authentication
+
+![Login](assets/images/chinh.png)
+
+### 2. **Màn hình Danh sách công việc**
+
+- Hiển thị danh sách tasks từ API
+- Đánh dấu hoàn thành bằng checkbox
+- Pull to refresh
+- Màu sắc theo độ ưu tiên
+
+![List](assets/images/list.png)
+
+### 3. **Màn hình Chi tiết công việc**
+
+- Hiển thị đầy đủ thông tin task
+- Danh sách công việc con (subtasks)
+- Tệp đính kèm (attachments)
+- Nút xóa công việc
+
+![Detail](assets/images/list-bf.png)
+
+### 4. **Màn hình Thêm công việc**
+
+- Form nhập thông tin task
+- Chọn danh mục, trạng thái, độ ưu tiên
+- Chọn ngày hạn hoàn thành
+
+![Add](assets/images/new_list.png)
+
+---
+
+## **Kết Quả Đạt Được**
+
+ Áp dụng thành công kiến trúc **MVVM**  
+ Quản lý state với **Provider**  
+ Tích hợp **Firebase Authentication**  
+ Gọi **REST API** thành công  
+ Giao diện đa ngôn ngữ (Tiếng Việt)  
+ Xử lý lỗi và hiển thị loading state
+
+---
+
+## **API Endpoint**
+
+```
+Base URL: https://amock.io/api/researchUTH
+
+GET    /tasks      - Lấy danh sách tasks
+GET    /task/{id}  - Lấy chi tiết task
+POST   /tasks      - Tạo task mới
+DELETE /task/{id}  - Xóa task
+```
+
+---
+
+## **Công Nghệ Sử Dụng**
+
+- **Flutter** - Framework UI
+- **Provider** - State Management
+- **Firebase Auth** - Xác thực người dùng
+- **HTTP** - Gọi REST API
+- **SQLite** - Lưu trữ local (offline mode)
